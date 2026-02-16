@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Meu Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <h1>Meu Blog</h1>
+        <p>Meu primeiro projeto no Cursor</p>
+      </div>
+      <nav class="app-nav">
+        <button data-route="home-public" class="nav-btn">Home</button>
+        <button data-route="home-private" class="nav-btn nav-auth-only">
+          Meus posts
+        </button>
+        <button data-route="create-post" class="nav-btn nav-auth-only">
+          Novo post
+        </button>
+        <button data-route="profile" class="nav-btn nav-auth-only">
+          Perfil
+        </button>
+        <button data-route="login" class="nav-btn nav-guest-only">
+          Entrar
+        </button>
+        <button id="logout-btn" class="nav-btn nav-auth-only nav-danger">
+          Sair
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- 1. Home não logada -->
+      <section id="screen-home-public" class="screen">
+        <article class="post">
+          <h2>Bem-vindo ao Meu Blog</h2>
+          <p>
+            Aqui você encontra posts incríveis. Para ver mais conteúdo e
+            gerenciar seu perfil, faça login ou acesse seus posts.
+          </p>
+          <div class="action-row">
+            <button
+              data-route="login"
+              class="primary-btn home-login-cta"
+            >
+              Fazer login
+            </button>
+          </div>
+        </article>
+      </section>
+
+      <!-- 2. Login -->
+      <section id="screen-login" class="screen">
+        <article class="card">
+          <h2>Entrar</h2>
+          <p class="card-subtitle">
+            Use qualquer e-mail e senha para simular o login (frontend apenas).
+          </p>
+          <form id="login-form" class="form">
+            <label class="form-field">
+              <span>E-mail</span>
+              <input
+                type="email"
+                id="login-email"
+                placeholder="voce@exemplo.com"
+                required
+              />
+            </label>
+            <label class="form-field">
+              <span>Senha</span>
+              <input
+                type="password"
+                id="login-password"
+                placeholder="••••••••"
+                required
+              />
+            </label>
+            <button type="submit" class="primary-btn full-width">
+              Entrar
+            </button>
+          </form>
+        </article>
+      </section>
+
+      <!-- 3. Edição de profile -->
+      <section id="screen-profile" class="screen">
+        <article class="card">
+          <h2>Meu perfil</h2>
+          <p class="card-subtitle">
+            Edite suas informações básicas. No futuro isso falará com o backend
+            em Python.
+          </p>
+          <form id="profile-form" class="form">
+            <label class="form-field">
+              <span>Nome</span>
+              <input
+                type="text"
+                id="profile-name"
+                placeholder="Seu nome"
+                required
+              />
+            </label>
+            <label class="form-field">
+              <span>E-mail</span>
+              <input
+                type="email"
+                id="profile-email"
+                placeholder="voce@exemplo.com"
+                required
+              />
+            </label>
+            <label class="form-field">
+              <span>Bio</span>
+              <textarea
+                id="profile-bio"
+                rows="3"
+                placeholder="Fale um pouco sobre você"
+              ></textarea>
+            </label>
+            <button type="submit" class="primary-btn full-width">
+              Salvar perfil
+            </button>
+          </form>
+          <p id="profile-message" class="helper-text"></p>
+        </article>
+      </section>
+
+      <!-- 4. Home logada = Lista de posts -->
+      <section id="screen-home-private" class="screen">
+        <article class="card">
+          <h2>Meus posts</h2>
+          <p class="card-subtitle">
+            Lista simples de posts simulados em memória.
+          </p>
+          <ul id="posts-list" class="post-list"></ul>
+        </article>
+      </section>
+
+      <!-- 5. Novo post -->
+      <section id="screen-create-post" class="screen">
+        <article class="card">
+          <h2>Novo post</h2>
+          <p class="card-subtitle">
+            Crie um novo post. Ainda sem persistência, mas já passando pelo backend
+            em Python.
+          </p>
+          <form id="create-post-form" class="form">
+            <label class="form-field">
+              <span>Título</span>
+              <input
+                type="text"
+                id="create-post-title"
+                placeholder="Título do post"
+                required
+              />
+            </label>
+            <label class="form-field">
+              <span>Conteúdo</span>
+              <textarea
+                id="create-post-body"
+                rows="5"
+                placeholder="Escreva seu post aqui"
+                required
+              ></textarea>
+            </label>
+            <button type="submit" class="primary-btn full-width">
+              Publicar
+            </button>
+          </form>
+          <p id="create-post-message" class="helper-text"></p>
+        </article>
+      </section>
+
+      <!-- 6. Detalhe de 1 post -->
+      <section id="screen-post-detail" class="screen">
+        <article class="post">
+          <button data-route="home-private" class="link-btn">
+            ← Voltar para lista de posts
+          </button>
+          <h2 id="post-detail-title">Título do post</h2>
+          <p id="post-detail-meta" class="post-meta"></p>
+          <p id="post-detail-body"></p>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <small>© 2026 - Meu Blog</small>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
+

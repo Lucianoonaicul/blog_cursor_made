@@ -1,0 +1,26 @@
+# Ambiente Python
+backend/.venv/
+__pycache__/
+*.py[cod]
+
+# Arquivos temporários / cache
+*.log
+.pytest_cache/
+
+# VSCode / Cursor / editor
+.vscode/
+.cursor/
+
+# Node / frontend (para uso futuro)
+node_modules/
+dist/
+build/
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Segredos (caso venham a existir)
+.env
+*.env
+
