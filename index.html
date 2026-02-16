@@ -180,9 +180,46 @@
           <button data-route="home-private" class="link-btn">
             ← Voltar para lista de posts
           </button>
+          <button id="edit-post-btn" class="link-btn">
+            Editar post
+          </button>
           <h2 id="post-detail-title">Título do post</h2>
           <p id="post-detail-meta" class="post-meta"></p>
           <p id="post-detail-body"></p>
+        </article>
+      </section>
+
+      <!-- 7. Edição de post -->
+      <section id="screen-edit-post" class="screen">
+        <article class="card">
+          <h2>Editar post</h2>
+          <p class="card-subtitle">
+            Altere o título ou conteúdo do post. Apenas o autor autenticado pode editar.
+          </p>
+          <form id="edit-post-form" class="form">
+            <label class="form-field">
+              <span>Título</span>
+              <input
+                type="text"
+                id="edit-post-title"
+                placeholder="Título do post"
+                required
+              />
+            </label>
+            <label class="form-field">
+              <span>Conteúdo</span>
+              <textarea
+                id="edit-post-body"
+                rows="5"
+                placeholder="Escreva seu post aqui"
+                required
+              ></textarea>
+            </label>
+            <button type="submit" class="primary-btn full-width">
+              Salvar alterações
+            </button>
+          </form>
+          <p id="edit-post-message" class="helper-text"></p>
         </article>
       </section>
     </main>

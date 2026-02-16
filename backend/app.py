@@ -19,6 +19,11 @@ class PostCreate(BaseModel):
     body: str
 
 
+class PostUpdate(BaseModel):
+    title: str
+    body: str
+
+
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str
@@ -109,6 +114,35 @@ def create_post(payload: PostCreate) -> Post:
     )
     posts_db.append(new_post)
     return new_post
+
+
+@app.put("/posts/{post_id}", response_model=Post)
+def update_post(post_id: int, payload: PostUpdate) -> Post:
+    if current_profile is None:
+        raise HTTPException(status_code=401, detail="Autenticação necessária")
+
+    for index, post in enumerate(posts_db):
+        if post.id == post_id:
+            if post.author != current_profile.name:
+                raise HTTPException(
+                    status_code=403,
+                    detail="Apenas o autor pode editar este post",
+                )
+
+            updated = Post(
+                id=post.id,
+                title=payload.title,
+                author=post.author,
+                date=post.date,
+                excerpt=(payload.body[:100] + "...")
+                if len(payload.body) > 100
+                else payload.body,
+                body=payload.body,
+            )
+            posts_db[index] = updated
+            return updated
+
+    raise HTTPException(status_code=404, detail="Post não encontrado")
 
 
 @app.post("/auth/login", response_model=LoginResponse)

@@ -5,6 +5,7 @@ const SCREENS = {
   HOME_PRIVATE: "home-private",
   POST_DETAIL: "post-detail",
   CREATE_POST: "create-post",
+  EDIT_POST: "edit-post",
 };
 
 const API_BASE_URL = "http://127.0.0.1:8000";
@@ -70,6 +71,9 @@ function showScreen(screen) {
       break;
     case SCREENS.POST_DETAIL:
       screenId = "screen-post-detail";
+      break;
+    case SCREENS.EDIT_POST:
+      screenId = "screen-edit-post";
       break;
     default:
       screenId = "screen-home-public";
@@ -146,7 +150,41 @@ async function openPostDetail(postId) {
   if (metaEl) metaEl.textContent = `${post.author} · ${post.date}`;
   if (bodyEl) bodyEl.textContent = post.body;
 
+   // Botão de edição: apenas para o autor autenticado
+  const editBtn = document.getElementById("edit-post-btn");
+  const canEdit =
+    state.isAuthenticated && state.user.name && state.user.name === post.author;
+
+  if (editBtn instanceof HTMLButtonElement) {
+    editBtn.style.display = canEdit ? "inline-flex" : "none";
+    editBtn.onclick = () => openEditPost(post.id);
+  }
+
   showScreen(SCREENS.POST_DETAIL);
+}
+
+function openEditPost(postId) {
+  const post = state.posts.find((p) => p.id === postId);
+  if (!post) return;
+
+  state.currentPostId = postId;
+
+  const titleInput = document.getElementById("edit-post-title");
+  const bodyInput = document.getElementById("edit-post-body");
+  const messageEl = document.getElementById("edit-post-message");
+
+  if (messageEl) {
+    messageEl.textContent = "";
+  }
+
+  if (titleInput instanceof HTMLInputElement) {
+    titleInput.value = post.title;
+  }
+  if (bodyInput instanceof HTMLTextAreaElement) {
+    bodyInput.value = post.body;
+  }
+
+  showScreen(SCREENS.EDIT_POST);
 }
 
 async function fetchPosts() {
@@ -208,6 +246,58 @@ function initCreatePost() {
 
         // Vai para a lista de posts
         showScreen(SCREENS.HOME_PRIVATE);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  });
+}
+
+function initEditPost() {
+  const form = document.getElementById("edit-post-form");
+  const titleInput = document.getElementById("edit-post-title");
+  const bodyInput = document.getElementById("edit-post-body");
+  const messageEl = document.getElementById("edit-post-message");
+
+  if (!(form instanceof HTMLFormElement)) return;
+  if (!(titleInput instanceof HTMLInputElement)) return;
+  if (!(bodyInput instanceof HTMLTextAreaElement)) return;
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    if (state.currentPostId == null) return;
+
+    const title = titleInput.value.trim();
+    const body = bodyInput.value.trim();
+
+    if (!title || !body) return;
+
+    fetch(`${API_BASE_URL}/posts/${state.currentPostId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title, body }),
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error("Erro ao atualizar post");
+        }
+        return res.json();
+      })
+      .then((updatedPost) => {
+        const index = state.posts.findIndex((p) => p.id === updatedPost.id);
+        if (index !== -1) {
+          state.posts[index] = updatedPost;
+        }
+        renderPostsList();
+
+        if (messageEl) {
+          messageEl.textContent = "Post atualizado com sucesso (em memória).";
+        }
+
+        openPostDetail(updatedPost.id);
       })
       .catch((error) => {
         console.error(error);
@@ -422,6 +512,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initProfile();
   initLogout();
   initCreatePost();
+  initEditPost();
   fetchPosts();
 
   // Tela inicial: home pública
